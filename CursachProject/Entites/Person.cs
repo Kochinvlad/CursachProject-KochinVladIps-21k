@@ -6,7 +6,19 @@ using System.Threading.Tasks;
 
 namespace CursachProject.Entites
 {
-    internal class Person
+    public class Person
     {
+        public int Id { get; set; }
+        public string FullName { get; set; }
+        public string ContactInformation { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public ICollection<Membership> Memberships { get; set; }
+    }
+
+    public class Membership
+    {
+        public int Id { get; set; }
+        public int PersonId { get; set; }
+        public Person Person { get; set; }
     }
 }
