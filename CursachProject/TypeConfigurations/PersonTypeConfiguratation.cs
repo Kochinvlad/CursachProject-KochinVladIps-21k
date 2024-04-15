@@ -18,5 +18,6 @@ namespace CursachProject.TypeConfigurations
             builder.Property(p => p.FullName).IsRequired();
            
         }
+
     }
 }
