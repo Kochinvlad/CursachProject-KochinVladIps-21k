@@ -27,7 +27,7 @@
         <StackPanel Grid.Row="1" Orientation="Vertical">
             <StackPanel>
                 <TextBlock Text="Clients"/>
-                <ListView ItemsSource="{Binding Name}">
+                <ListView ItemsSource="{Binding Clients}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
@@ -37,17 +37,9 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                <Button Content="Добавить клиента" Command="{Binding AddClientCommand}"/>
             </StackPanel>
             <StackPanel>
-                <ListView ItemsSource="{Binding SelectedPerson.Memberships}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Id}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
                 <TextBlock Text="Членский состав" RenderTransformOrigin="0.5,0.5">
                     <TextBlock.RenderTransform>
                         <TransformGroup>
@@ -58,6 +50,17 @@
                         </TransformGroup>
                     </TextBlock.RenderTransform>
                 </TextBlock>
+                <ListView ItemsSource="{Binding SelectedPerson.Memberships}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Id}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                
+                <Button Content="Добавить члена состава" Command="{Binding AddMembershipCommand}"/>
             </StackPanel>
         </StackPanel>
 
