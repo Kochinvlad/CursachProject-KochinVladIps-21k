@@ -3,16 +3,47 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:CursachProject.ViewModels"
         xmlns:local="clr-namespace:CursachProject"
-        Title="Sport Club Management Software" Height="450" Width="600">
+        Title="Sport Club Management Software" Height="650" Width="980">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="LightBlue"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="DarkBlue"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style TargetType="ListView">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="LightGray"/>
+        </Style>
+    </Window.Resources>
+
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
     <Grid>
+
+        <Grid.Background>
+            <ImageBrush ImageSource="C:\Users\ISP\source\repos\CursachProject-KochinVladIps-21k\CursachProject\Images\background.jpg" Stretch="UniformToFill"/>
+        </Grid.Background>
+
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Menu Grid.Row="0">
@@ -23,51 +54,55 @@
             <MenuItem Header="_Настройки"/>
         </Menu>
 
-        <!-- Разделы приложения -->
-        <StackPanel Grid.Row="1" Orientation="Vertical">
-            <StackPanel>
-                <TextBlock Text="Clients"/>
-                <ListView ItemsSource="{Binding Clients}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding FullName}"/>
-                                <TextBlock Text="{Binding ContactInformation}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <Button Content="Добавить клиента" Command="{Binding AddClientCommand}"/>
-            </StackPanel>
-            <StackPanel>
-                <TextBlock Text="Членский состав" RenderTransformOrigin="0.5,0.5">
-                    <TextBlock.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform Angle="0.005"/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </TextBlock.RenderTransform>
-                </TextBlock>
-                <ListView ItemsSource="{Binding SelectedPerson.Memberships}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="{Binding Id}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                
-                <Button Content="Добавить члена состава" Command="{Binding AddMembershipCommand}"/>
-            </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10">
+            <TextBlock Text="Clients" Style="{StaticResource {x:Type TextBlock}}"/>
+            <ListView ItemsSource="{Binding Clients}" Style="{StaticResource {x:Type ListView}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding FullName}" Style="{StaticResource {x:Type TextBlock}}"/>
+                            <TextBlock Text="{Binding ContactInformation}" Style="{StaticResource {x:Type TextBlock}}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button Content="Add Client" Command="{Binding AddClientCommand}" Style="{StaticResource {x:Type Button}}"/>
         </StackPanel>
 
-        <StatusBar Grid.Row="2">
-            <StatusBarItem>
-                <TextBlock Text="Ready"/>
-            </StatusBarItem>
-        </StatusBar>
+        <StackPanel Grid.Row="2" Orientation="Vertical" Margin="10">
+            <TextBlock Text="Membership" Style="{StaticResource {x:Type TextBlock}}">
+                <TextBlock.RenderTransform>
+                    <TransformGroup>
+                        <RotateTransform Angle="0.005"/>
+                    </TransformGroup>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            <ListView ItemsSource="{Binding SelectedPerson.Memberships}" Style="{StaticResource {x:Type ListView}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Id}" Style="{StaticResource {x:Type TextBlock}}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button Content="Add Membership" Command="{Binding AddMembershipCommand}" Style="{StaticResource {x:Type Button}}"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="3" ItemsSource="{Binding Clients}" AutoGenerateColumns="False" MinHeight="150" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding FullName}" />
+                <DataGridTextColumn Header="Contact Information" Binding="{Binding ContactInformation}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid Grid.Row="4" ItemsSource="{Binding Employees}" AutoGenerateColumns="False" MinHeight="150" Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding FullName}" />
+                <DataGridTextColumn Header="Role" Binding="{Binding Role}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+      
     </Grid>
 </Window>

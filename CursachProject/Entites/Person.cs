@@ -13,6 +13,12 @@ namespace CursachProject.Entites
         public string ContactInformation { get; set; }
         public DateTime DateOfBirth { get; set; }
         public ICollection<Membership> Memberships { get; set; }
+        public string Role { get;set; }
+
+        public static implicit operator Person(ViewModels.Person v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Membership
@@ -20,6 +26,6 @@ namespace CursachProject.Entites
         public int Id { get; set; }
         public int PersonId { get; set; }
         public Person Person { get; set; }
-        public string MemberName { get; internal set; }
+        public string MemberName { get; set; }
     }
 }

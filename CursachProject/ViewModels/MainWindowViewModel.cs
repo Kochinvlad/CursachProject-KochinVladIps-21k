@@ -11,15 +11,49 @@ using System.Threading.Tasks;
 
 namespace CursachProject.ViewModels
 {
+    public interface IAddable
+    {
+        void AddToCollection<T>(ObservableCollection<T> collection) where T : class;
+    }
+
+    public class Position
+    {
+        public string Title { get; set; }
+    }
+
+    public class Person : IAddable
+    {
+        public string FullName { get; set; }
+        public string ContactInformation { get; set; }
+        public Position Role { get; set; }
+        public ObservableCollection<Membership> Memberships { get; } = new ObservableCollection<Membership>();
+        public int Id { get; internal set; }
+
+        public void AddToCollection<T>(ObservableCollection<T> collection) where T : class
+        {
+            if (this is T item)
+            {
+                collection.Add(item);
+            }
+        }
+    }
+
     public class MainWindowViewModel : ReactiveObject
     {
         private ObservableCollection<Person> persons;
         private Person selectedPerson;
+        private ObservableCollection<Person> employees;
 
         public ObservableCollection<Person> Persons
         {
             get => persons;
             set => this.RaiseAndSetIfChanged(ref persons, value);
+        }
+
+        public ObservableCollection<Person> Employees
+        {
+            get => employees;
+            set => this.RaiseAndSetIfChanged(ref employees, value);
         }
 
         public Person SelectedPerson
@@ -30,32 +64,36 @@ namespace CursachProject.ViewModels
 
         public ReactiveCommand<Unit, Unit> AddClientCommand { get; }
         public ReactiveCommand<Unit, Unit> AddMembershipCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddEmployeeCommand { get; }
 
         public MainWindowViewModel()
         {
             Persons = new ObservableCollection<Person>();
+            Employees = new ObservableCollection<Person>();
 
-            AddClientCommand = ReactiveCommand.Create(AddClient);
-            AddMembershipCommand = ReactiveCommand.Create(AddMembership);
-        }
+            AddClientCommand = ReactiveCommand.Create(() => new Person { FullName = "Новый клиент", ContactInformation = "Новая контактная информация" }.AddToCollection(Persons));
 
-        private void AddClient()
-        {
-            Persons.Add(new Person { FullName = "Новый клиент", ContactInformation = "Новая контактная информация" });
-        }
-
-        private void AddMembership()
-        {
-            if (SelectedPerson != null)
+            AddMembershipCommand = ReactiveCommand.Create(() =>
             {
-                SelectedPerson.Memberships.Add(new Membership
+                if (SelectedPerson != null)
                 {
-                    Id = (int)Guid.NewGuid().ToByteArray()[0],
-                    PersonId = SelectedPerson.Id, 
-                    Person = SelectedPerson,
-                    MemberName = "NewMember"
-                });
-            }
+                    SelectedPerson.Memberships.Add(new Membership
+                    {
+                        Id = GenerateRandomId(),
+                        PersonId = SelectedPerson.Id,
+                        Person = SelectedPerson,
+                        MemberName = "NewMember"
+                    });
+                }
+            });
+
+            AddEmployeeCommand = ReactiveCommand.Create(() => new Person { FullName = "Новый сотрудник", Role = new Position { Title = "Должность" } }.AddToCollection(Employees));
+        }
+
+        private int GenerateRandomId()
+        {
+            var random = new Random();
+            return random.Next(1, 1000);
         }
     }
 }
